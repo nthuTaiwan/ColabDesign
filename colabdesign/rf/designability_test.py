@@ -4,6 +4,7 @@ from colabdesign.mpnn import mk_mpnn_model
 from colabdesign.af import mk_af_model
 from colabdesign.shared.protein import pdb_to_string
 from colabdesign.shared.parse_args import parse_args
+from colabdesign.mpnn.model import aa_order
 
 import pandas as pd
 import numpy as np
@@ -140,6 +141,7 @@ def main(argv):
       af_model.opt["fix_pos"] = p[p < af_model._len]
 
     mpnn_model.get_af_inputs(af_model)
+    mpnn_model._inputs["bias"][:,aa_order["Y"]] += 1.39
     outs.append(mpnn_model.sample(num=o.num_seqs//batch_size, batch=batch_size, temperature=sampling_temp))
 
   if protocol == "binder":
